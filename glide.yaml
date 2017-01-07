@@ -1,0 +1,16 @@
+package: fairview
+import:
+- package: github.com/Sirupsen/logrus
+  subpackages:
+  - github.com\Sirupsen\logrus
+- package: github.com/gorilla/mux
+  subpackages:
+  - github.com\gorilla\mux
+- package: gopkg.in/urfave/cli.v2
+  subpackages:
+  - gopkg.in\urfave\cli.v2
+- package: gopkg.in/mgo.v2
+  subpackages:
+  - bson
+- package: github.com/gorilla/handlers
+  version: v1.1
