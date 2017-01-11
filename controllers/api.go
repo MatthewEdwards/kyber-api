@@ -1,18 +1,19 @@
-package api
+package controllers
 
 import (
 	"kyber-api/datastore"
-	"github.com/gorilla/mux"
+
 	log "github.com/Sirupsen/logrus"
+	"github.com/gorilla/mux"
 )
 
 // DStore is used to store a database connection
-type DStore struct{
+type DStore struct {
 	connection *datastore.MgoConnection
 }
 
 // DatastoreConnect will get a connection to the database
-func DatastoreConnect() *DStore{
+func DatastoreConnect() *DStore {
 	log.Info("[API] DatastoreConnect")
 	DS := &DStore{
 		connection: datastore.NewDBConnection(),
@@ -22,7 +23,7 @@ func DatastoreConnect() *DStore{
 }
 
 // NewAPIRouter will setup the API routes
-func NewAPIRouter() *mux.Router{
+func NewAPIRouter() *mux.Router {
 	log.Info("[API] NewAPIRouter")
 	DS := DatastoreConnect()
 

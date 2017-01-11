@@ -1,20 +1,21 @@
 package datastore
 
 import (
-    "gopkg.in/mgo.v2"
-    log "github.com/Sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
+	"gopkg.in/mgo.v2"
 )
 
+// MgoConnection is used to store a mongodb session
 type MgoConnection struct {
 	session *mgo.Session
 }
 
 // NewDBConnection will return a connection to the database
-func NewDBConnection()(conn *MgoConnection){
+func NewDBConnection() (conn *MgoConnection) {
 	conn = new(MgoConnection)
 	conn.DBConnect()
 
-	if conn.session == nil{
+	if conn.session == nil {
 		log.Fatal("[DBConnect] Error unable to connect to the database")
 	}
 	return conn
@@ -25,7 +26,7 @@ func (c *MgoConnection) DBConnect() (err error) {
 	log.Info("[Datastore] DBConnect")
 
 	c.session, err = mgo.Dial("mongodb://localhost")
-	
+
 	if err != nil {
 		log.Error("[Datastore] DBConnect Error: ", err)
 		return err
@@ -33,22 +34,22 @@ func (c *MgoConnection) DBConnect() (err error) {
 
 	articlesCollection := c.session.DB("KyberDB").C("ArticlesCollection")
 
-	if articlesCollection == nil{
+	if articlesCollection == nil {
 		log.Error("[Datastore] DBConnect Error")
 	}
-	
+
 	return
 }
 
-func (c *MgoConnection) getSession()(session *mgo.Session, articlesCollection *mgo.Collection, err error) {
+func (c *MgoConnection) getSession() (session *mgo.Session, articlesCollection *mgo.Collection, err error) {
 	log.Info("[Datastore] getSession")
-	
-	if c.session != nil{
+
+	if c.session != nil {
 		session = c.session.Copy()
 		articlesCollection = session.DB("KyberDB").C("ArticlesCollection")
-	} else{
+	} else {
 		log.Error("[Datastore] getSession Error")
 	}
-	
+
 	return
 }
