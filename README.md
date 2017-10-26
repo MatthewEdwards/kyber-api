@@ -14,7 +14,6 @@ Kyber-API is the API server for the kyber new dashboard. It exposes routes to in
     - [Prerequisites](#prerequisites)
     - [Getting the Code](#getting-the-code)
 - [Versioning](#versioning)
-- [Acknowledgments](#acknowledgments)
 
 ## Installation
 
