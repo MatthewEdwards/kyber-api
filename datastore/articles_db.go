@@ -13,12 +13,12 @@ func (c *MgoConnection) GetArticles() (articles []models.MongoArticle) {
 	log.Info("[Datastore] GetArticles")
 	session, articlesCollection, err := c.getSession()
 
+	defer session.Close()
+
 	if err != nil {
 		log.Error("[Datastore] GetArticles Error: ", err)
 		return nil
 	}
-
-	defer session.Close()
 
 	// Get the articles and sort them in reverse order
 	dberr := articlesCollection.Find(nil).Sort("-_id").All(&articles)
@@ -36,12 +36,12 @@ func (c *MgoConnection) AddArticle(article models.Article) (err error) {
 	log.Info("[Datastore] AddArticle")
 	session, articlesCollection, err := c.getSession()
 
+	defer session.Close()
+
 	if err != nil {
 		log.Info("[Datastore] AddArticle Error: ", err)
 		return err
 	}
-
-	defer session.Close()
 
 	// Convert the Article into a MongoArticle and add it to the database
 	err = articlesCollection.Insert(

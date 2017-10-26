@@ -31,8 +31,8 @@ func main() {
 		Commands: []*cli.Command{
 			{
 				// This will launch the API server
-				Name:        "api",
-				Aliases:     []string{"a"},
+				Name:        "run",
+				Aliases:     []string{"r"},
 				Usage:       "Launch Kyber",
 				Description: "Launch the API server",
 				Action: func(c *cli.Context) error {
