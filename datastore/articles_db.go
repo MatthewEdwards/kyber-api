@@ -4,7 +4,7 @@ import (
 	"kyber-api/models"
 	"kyber-api/utils"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"gopkg.in/mgo.v2/bson"
 )
 

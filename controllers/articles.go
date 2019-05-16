@@ -5,7 +5,7 @@ import (
 	"kyber-api/models"
 	"net/http"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 // GetArticlesHandler retrives a list of all the articles from the database

@@ -3,8 +3,8 @@ package controllers
 import (
 	"kyber-api/datastore"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
+	log "github.com/sirupsen/logrus"
 )
 
 // DStore is used to store a database connection
