@@ -2,6 +2,7 @@ package app
 
 import (
 	"encoding/json"
+	"kyber-api/datastore"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -10,12 +11,10 @@ import (
 
 type application struct {
 	router *mux.Router
+	db     *datastore.MongoDB
 }
 
 func (app *application) startServer() {
-
-	app.routes()
-
 	if app.router != nil {
 		log.Info("Starting API")
 		log.Info(http.ListenAndServe(":8080", app.router))
@@ -45,6 +44,8 @@ func response(w http.ResponseWriter, responseData interface{}, status int) {
 func NewApplication() {
 	app := &application{
 		router: mux.NewRouter().StrictSlash(true),
+		db:     datastore.NewDBConnection(),
 	}
+	app.routes()
 	app.startServer()
 }

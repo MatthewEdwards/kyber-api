@@ -1,55 +1,38 @@
 package datastore
 
 import (
+	"context"
+	"time"
+
 	log "github.com/sirupsen/logrus"
-	"gopkg.in/mgo.v2"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// MgoConnection is used to store a mongodb session
-type MgoConnection struct {
-	session *mgo.Session
+type MongoDB struct {
+	Session *mongo.Client
 }
 
 // NewDBConnection will return a connection to the database
-func NewDBConnection() (conn *MgoConnection) {
-	conn = new(MgoConnection)
-	conn.DBConnect()
-
-	if conn.session == nil {
-		log.Fatal("[DBConnect] Error unable to connect to the database")
+func NewDBConnection() (connection *MongoDB) {
+	db := &MongoDB{
+		Session: newDBClient(),
 	}
-	return conn
+
+	if db.Session == nil {
+		log.Fatal("Unable to connect to the database")
+	}
+	return db
 }
 
-// DBConnect will connect to the database
-func (c *MgoConnection) DBConnect() (err error) {
-	log.Info("[Datastore] DBConnect")
-
-	c.session, err = mgo.Dial("mongodb://localhost")
+func newDBClient() *mongo.Client {
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017"))
 
 	if err != nil {
-		log.Error("[Datastore] DBConnect Error: ", err)
-		return err
+		log.Error("Unable to connect to the database", err)
+		return nil
 	}
 
-	articlesCollection := c.session.DB("KyberDB").C("ArticlesCollection")
-
-	if articlesCollection == nil {
-		log.Error("[Datastore] DBConnect Error")
-	}
-
-	return
-}
-
-func (c *MgoConnection) getSession() (session *mgo.Session, articlesCollection *mgo.Collection, err error) {
-	log.Info("[Datastore] getSession")
-
-	if c.session != nil {
-		session = c.session.Copy()
-		articlesCollection = session.DB("KyberDB").C("ArticlesCollection")
-	} else {
-		log.Error("[Datastore] getSession Error")
-	}
-
-	return
+	return client
 }
