@@ -26,8 +26,10 @@ func NewDBConnection() (connection *MongoDB) {
 }
 
 func newDBClient() *mongo.Client {
-	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017"))
+
+	defer cancel()
 
 	if err != nil {
 		log.Error("Unable to connect to the database", err)
