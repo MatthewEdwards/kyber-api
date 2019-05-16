@@ -9,5 +9,4 @@ dist: trusty
 sudo: false
 install: true
 script:
-  - go build
-  - go test
+  - env GO111MODULE=on go build
