@@ -12,25 +12,7 @@ type application struct {
 	router *mux.Router
 }
 
-func (app *application) routes() {
-	//app.router = mux.NewRouter().StrictSlash(true)
-	//app.router.HandleFunc("/api/v1/articles", app.handlePostAricle).Methods("POST")
-
-	app.router.HandleFunc("/api/v1/articles", app.handleGetAricles()).Methods("GET")
-}
-
-func newApplication() *application {
-	return &application{
-		router: mux.NewRouter(),
-	}
-}
-
-func Start() {
-	app := newApplication()
-	app.newServer()
-}
-
-func (app *application) newServer() {
+func (app *application) startServer() {
 
 	app.routes()
 
@@ -57,4 +39,12 @@ func response(w http.ResponseWriter, responseData interface{}, status int) {
 	w.WriteHeader(status)
 	w.Write(jsn)
 
+}
+
+// NewApplication will initliaze the appplication and start the server
+func NewApplication() {
+	app := &application{
+		router: mux.NewRouter().StrictSlash(true),
+	}
+	app.startServer()
 }

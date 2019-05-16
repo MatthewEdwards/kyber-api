@@ -4,7 +4,6 @@ import (
 	"kyber-api/app"
 	"os"
 
-	log "github.com/sirupsen/logrus"
 	"gopkg.in/urfave/cli.v2"
 )
 
@@ -20,8 +19,7 @@ func main() {
 				Usage:       "Launch Kyber",
 				Description: "Launch the API server",
 				Action: func(c *cli.Context) error {
-					log.Info("[APP] Launching API server")
-					app.Start()
+					app.NewApplication()
 					return nil
 				},
 			},

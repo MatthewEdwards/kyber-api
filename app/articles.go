@@ -14,12 +14,11 @@ func (app *application) handleGetAricles() http.HandlerFunc {
 
 	result := &article{
 		Title: "WireGuard VPN review: A new type of VPN offers serious advantages",
-		URL:   "https://arstechnica.com/gadgets/2018/08/wireguard-vpn-review-fast-connections-amaze-but-windows-support-needs-to-happen/"}
+		URL:   "https://arstechnica.com/gadgets/2018/08/wireguard-vpn-review-fast-connections-amaze-but-windows-support-needs-to-happen/",
+	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Info("Returning all articles")
 		response(w, result, 200)
 	}
 }
-
-
