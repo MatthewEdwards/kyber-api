@@ -12,10 +12,6 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-type MockApplication struct {
-	db MockDatastore
-}
-
 type MockDatastore struct {
 	Session mock.Mock
 }
