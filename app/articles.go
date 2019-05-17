@@ -19,18 +19,6 @@ func (app *application) handleGetAricles() http.HandlerFunc {
 
 func (app *application) handlePostAricle() http.HandlerFunc {
 
-	type error struct {
-		Error   bool   `json:"error"`
-		Code    int    `json:"code"`
-		Message string `json:"message"`
-	}
-
-	type success struct {
-		Error   bool   `json:"error"`
-		Code    int    `json:"code"`
-		Message string `json:"message"`
-	}
-
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Info("Posting a new article")
 
@@ -40,7 +28,7 @@ func (app *application) handlePostAricle() http.HandlerFunc {
 
 		if err != nil {
 			log.Error("Error posting article: ", err)
-			response(w, &error{Error: true, Code: http.StatusBadRequest, Message: err.Error()}, http.StatusBadRequest)
+			response(w, &errorResponse{Error: true, Code: http.StatusBadRequest, Message: err.Error()}, http.StatusBadRequest)
 			return
 		}
 
@@ -48,10 +36,10 @@ func (app *application) handlePostAricle() http.HandlerFunc {
 
 		if err != nil {
 			log.Error("Error adding article to database: ", err)
-			response(w, &error{Error: true, Code: http.StatusBadRequest, Message: err.Error()}, http.StatusBadRequest)
+			response(w, &errorResponse{Error: true, Code: http.StatusBadRequest, Message: err.Error()}, http.StatusBadRequest)
 			return
 		}
 
-		response(w, &success{Error: false, Code: http.StatusOK, Message: "Article has been posted"}, http.StatusOK)
+		response(w, &successResponse{Error: false, Code: http.StatusOK, Message: "Article has been posted"}, http.StatusOK)
 	}
 }

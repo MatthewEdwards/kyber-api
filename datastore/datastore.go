@@ -9,6 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+// MongoDB stores a mongo client session
 type MongoDB struct {
 	Session *mongo.Client
 }
@@ -16,7 +17,7 @@ type MongoDB struct {
 // NewDBConnection will return a connection to the database
 func NewDBConnection() (connection *MongoDB) {
 	db := &MongoDB{
-		Session: newDBClient(),
+		Session: newClient(),
 	}
 
 	if db.Session == nil {
@@ -25,7 +26,7 @@ func NewDBConnection() (connection *MongoDB) {
 	return db
 }
 
-func newDBClient() *mongo.Client {
+func newClient() *mongo.Client {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017"))
 
