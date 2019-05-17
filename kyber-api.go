@@ -1,30 +1,18 @@
-/**
- * Kyber API Server
- */
 package main
 
 import (
-	"kyber-api/controllers"
-	"net/http"
+	"kyber-api/app"
 	"os"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"gopkg.in/urfave/cli.v2"
 )
 
-// LaunchAPI launchs the API server
-func LaunchAPI() {
-	log.Info("[API] LaunchAPI")
-
-	router := controllers.NewAPIRouter()
-
-	if router != nil {
-		log.Info("[LaunchAPI] Launching API server")
-		log.Info(http.ListenAndServe(":8000", router))
-	}
-}
-
 func main() {
+	log.SetFormatter(&log.TextFormatter{
+		FullTimestamp: true,
+	})
+
 	app := &cli.App{
 		Name:  "Kyber",
 		Usage: "News Dashboard",
@@ -36,8 +24,7 @@ func main() {
 				Usage:       "Launch Kyber",
 				Description: "Launch the API server",
 				Action: func(c *cli.Context) error {
-					log.Info("[APP] Launching API server")
-					LaunchAPI()
+					app.NewApplication()
 					return nil
 				},
 			},

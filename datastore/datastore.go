@@ -1,55 +1,46 @@
 package datastore
 
 import (
-	log "github.com/Sirupsen/logrus"
-	"gopkg.in/mgo.v2"
+	"context"
+	"time"
+
+	log "github.com/sirupsen/logrus"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// MgoConnection is used to store a mongodb session
-type MgoConnection struct {
-	session *mgo.Session
+type Datastore interface {
+	GetArticles() (articles []Article)
+	AddArticle(article Article) (err error)
+}
+
+// MongoDB stores a mongo client session
+type MongoDB struct {
+	Session *mongo.Client
 }
 
 // NewDBConnection will return a connection to the database
-func NewDBConnection() (conn *MgoConnection) {
-	conn = new(MgoConnection)
-	conn.DBConnect()
-
-	if conn.session == nil {
-		log.Fatal("[DBConnect] Error unable to connect to the database")
+func NewDBConnection() (connection *MongoDB) {
+	db := &MongoDB{
+		Session: newClient(),
 	}
-	return conn
+
+	if db.Session == nil {
+		log.Fatal("Unable to connect to the database")
+	}
+	return db
 }
 
-// DBConnect will connect to the database
-func (c *MgoConnection) DBConnect() (err error) {
-	log.Info("[Datastore] DBConnect")
+func newClient() *mongo.Client {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017"))
 
-	c.session, err = mgo.Dial("mongodb://localhost")
+	defer cancel()
 
 	if err != nil {
-		log.Error("[Datastore] DBConnect Error: ", err)
-		return err
+		log.Error("Unable to connect to the database", err)
+		return nil
 	}
 
-	articlesCollection := c.session.DB("KyberDB").C("ArticlesCollection")
-
-	if articlesCollection == nil {
-		log.Error("[Datastore] DBConnect Error")
-	}
-
-	return
-}
-
-func (c *MgoConnection) getSession() (session *mgo.Session, articlesCollection *mgo.Collection, err error) {
-	log.Info("[Datastore] getSession")
-
-	if c.session != nil {
-		session = c.session.Copy()
-		articlesCollection = session.DB("KyberDB").C("ArticlesCollection")
-	} else {
-		log.Error("[Datastore] getSession Error")
-	}
-
-	return
+	return client
 }
