@@ -26,7 +26,8 @@ Before you get the code you will need to install the following dependencies
 
 First checkout the code using git
 ```
-git clone git@github.com:matthewedwards/kyber-api/platform.git src\github.com\matthewedwards/kyber-api
+git clone git@github.com:MatthewEdwards/kyber-api.git
+cd kyber-api
 ```
 
 Then cd into the directory and build the project
