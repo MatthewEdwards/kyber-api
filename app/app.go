@@ -10,7 +10,7 @@ import (
 
 type application struct {
 	router *mux.Router
-	db     *datastore.MongoDB
+	db     datastore.Datastore
 }
 
 func (app *application) start() {

@@ -9,6 +9,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+type Datastore interface {
+	GetArticles() (articles []Article)
+	AddArticle(article Article) (err error)
+}
+
 // MongoDB stores a mongo client session
 type MongoDB struct {
 	Session *mongo.Client

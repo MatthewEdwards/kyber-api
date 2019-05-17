@@ -10,7 +10,7 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 )
 
-func (app *application) handleGetAricles() http.HandlerFunc {
+func (app *application) handleGetArticles() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Info("Returning all articles")
 
@@ -19,7 +19,7 @@ func (app *application) handleGetAricles() http.HandlerFunc {
 	}
 }
 
-func (app *application) handlePostAricle() http.HandlerFunc {
+func (app *application) handlePostArticle() http.HandlerFunc {
 
 	var validate *validator.Validate
 	validate = validator.New()
@@ -39,10 +39,10 @@ func (app *application) handlePostAricle() http.HandlerFunc {
 
 		t := time.Now()
 		timestamp := time.Date(t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second(), 0, time.Local).Format("2006-01-02 15:04:05")
-
 		article.Date = timestamp
 
 		err = validate.Struct(article)
+
 		if err != nil {
 			validationErrors := err.(validator.ValidationErrors)
 			log.Error("Unable to validate article", validationErrors)
