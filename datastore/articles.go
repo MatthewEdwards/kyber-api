@@ -11,14 +11,16 @@ import (
 
 // Article will hold details for articles that are stored in the database
 type Article struct {
-	ID    primitive.ObjectID `bson:"_id"`
-	Title string             `bson:"title"`
-	URL   string             `bson:"url"`
+	_ID   primitive.ObjectID `bson:"_id"`
+	Title string             `bson:"title" validate:"required"`
+	Source string 			 `bson:"source" validate:"required"`
+	Date string 			 `bson:"date"`
+	URL   string             `bson:"url" validate:"required,url"`
 }
 
 // GetArticles will return all of the articles stored in the table
 func (c *MongoDB) GetArticles() (articles []Article) {
-	log.Info("[Datastore] GetArticles")
+	log.Info("Retrieving articles from the database")
 
 	collection := c.Session.Database("Kyber").Collection("Articles")
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -28,7 +30,7 @@ func (c *MongoDB) GetArticles() (articles []Article) {
 	defer cancel()
 
 	if err != nil {
-		log.Error(err)
+		log.Error("Unable to retrieving articles from the database", err)
 	}
 
 	for cur.Next(ctx) {
@@ -42,14 +44,13 @@ func (c *MongoDB) GetArticles() (articles []Article) {
 
 // AddArticle will insert an article into the database
 func (c *MongoDB) AddArticle(article Article) (err error) {
-	log.Info("[Datastore] GetArticles")
+	log.Info("Adding a new article to the database")
 
 	collection := c.Session.Database("Kyber").Collection("Articles")
-
 	_, err = collection.InsertOne(context.TODO(), article)
 
 	if err != nil {
-		log.Error(err)
+		log.Error("Unable to add the article to the database", err)
 	}
 
 	return nil

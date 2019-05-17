@@ -4,10 +4,15 @@ import (
 	"kyber-api/app"
 	"os"
 
+	log "github.com/sirupsen/logrus"
 	"gopkg.in/urfave/cli.v2"
 )
 
 func main() {
+	log.SetFormatter(&log.TextFormatter{
+		FullTimestamp: true,
+	})
+
 	app := &cli.App{
 		Name:  "Kyber",
 		Usage: "News Dashboard",

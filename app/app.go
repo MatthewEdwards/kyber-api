@@ -1,7 +1,6 @@
 package app
 
 import (
-	"encoding/json"
 	"kyber-api/datastore"
 	"net/http"
 
@@ -14,38 +13,22 @@ type application struct {
 	db     *datastore.MongoDB
 }
 
-func (app *application) startServer() {
+func (app *application) start() {
 	if app.router != nil {
-		log.Info("Starting API")
+		log.Info("Starting server")
 		log.Info(http.ListenAndServe(":8080", app.router))
+	} else {
+		log.Fatal("Unable to start server")
 	}
-}
-
-func response(w http.ResponseWriter, responseData interface{}, status int) {
-	log.Info("Retuning a response")
-
-	jsn, err := json.MarshalIndent(responseData, "", "    ")
-
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE")
-	w.Header().Set("Content-Type", "application/json")
-
-	w.WriteHeader(status)
-	w.Write(jsn)
-
 }
 
 // NewApplication will initliaze the appplication and start the server
 func NewApplication() {
+	log.Info("Setting up a new application")
 	app := &application{
 		router: mux.NewRouter().StrictSlash(true),
 		db:     datastore.NewDBConnection(),
 	}
 	app.routes()
-	app.startServer()
+	app.start()
 }
