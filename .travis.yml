@@ -8,8 +8,5 @@ os:
 dist: trusty
 sudo: false
 install: true
-branches:
-  except:
-  - master
 script:
   - env GO111MODULE=on go build
